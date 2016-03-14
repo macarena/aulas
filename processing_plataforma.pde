@@ -68,4 +68,5 @@ void draw() {
   acaoPlayer();
   desenhaPlayer();
   text(frameRate, 20, 20);
+  //os dois foram bananas pois não editaram o texto do commit
 }
