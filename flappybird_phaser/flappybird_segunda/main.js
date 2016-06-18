@@ -43,9 +43,9 @@ var estado = {
     
     update: function() {
         if (this.passarinho.y > 490)
-            this.reiniciaJogo();
+            this.animacaoMorte();
         
-        jogo.physics.arcade.overlap(this.passarinho, this.canos, this.reiniciaJogo);
+        jogo.physics.arcade.overlap(this.passarinho, this.canos, this.animacaoMorte, null, this);
         
         if(this.passarinho.angle < 20)
             this.passarinho.angle += 1;
@@ -94,6 +94,25 @@ var estado = {
         for (var i = 0; i < 8; i++)
             if (i != buraco && i != buraco + 1)
                 this.addQuadrado(400,10 + i*60);
+    },
+    
+    animacaoMorte: function(){
+        this.passarinho.alive = false;
+        
+        jogo.time.events.remove(this.timer);
+
+        this.canos.forEach(function(quad){
+            quad.body.velocity.x = 0;               
+        }, this);
+        
+        this.mostraFinal();
+    },
+    
+    mostraFinal: function() {
+        this.placar = jogo.add.text(180, 200, this.pontos, {
+            font: "70px Arial Black",
+            fill: "#fff"
+        });
     }
 
 }

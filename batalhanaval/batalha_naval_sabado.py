@@ -1,54 +1,74 @@
 from random import randint
+from time import sleep
 
 class Navio:
     pass
 
     def __init__(self, nome):
         self.nome = nome
-        self.linha = randint(0, linhas -1)
-        self.coluna = randint(0, colunas -1)
+        self.vivo = True
 
-tabuleiro = []
+    def posiciona(self, linha, coluna):
+        self.linha = linha
+        self.coluna = coluna
 
-colunas = 10
-linhas = 10
+    def __repr__(self):
+        if self.vivo:
+            return "W"
+        else:
+            return "!"
 
-for x in range(linhas):
-    tabuleiro.append(["O"] * colunas)
+class Tabuleiro:
+    tentativa = 0
 
+    def __init__(self, navios, linhas, colunas):
+        if colunas:
+            self.colunas = colunas
+        else:
+            self.colunas = linhas
+        self.linhas = linhas
+        self.casas = []
+        for x in range(linhas):
+            self.casas.append(["O"] * colunas)
+        for navio in navios:
+            self.arrumar(navio)
 
-def print_tabuleiro(t):
-    for linha in t:
-        print " ".join(linha)
+    def arrumar(self, navio):
+        casa = ''
+        while casa != "O":
+            linha = randint(0, self.linhas -1)
+            coluna = randint(0, self.colunas -1)
+            casa = self.casas[linha][coluna]
+        
+        self.casas[linha][coluna] = navio
+        navio.posiciona(linha,coluna)
 
-navios = [Navio("titanic"),Navio("bote"),Navio("caravela")]
+    def mostra(self):
+        for linha in self.casas:
+            print " ".join(str(casa) for casa in linha)
+
+    def chute(self, linha, coluna):
+        if isinstance(self.casas[linha][coluna], Navio):
+            print "\nParabéns! Acertou mizerávi...\n"
+            self.casas[linha][coluna].vivo = False
+        else:
+            print "\nVocê errou!\n"
+            self.casas[linha][coluna] = "X"
+
+barcos = [Navio("titanic"),Navio("bote"),Navio("caravela")]
 
 print "Vamos jogar batalha naval! UHUUUUU!!!"
 
 final = False
-tentativas = 0
 
-print_tabuleiro(tabuleiro)
+tabuleiro = Tabuleiro(barcos, 5, 5)
 
-while final == False:
-    print "Você chutou %s vezes" % tentativas
-    tentativas += 1
+tabuleiro.mostra()
 
+while True:
     chute_linha = input("qual linha?") -1
     chute_coluna = input("qual coluna?") -1
 
-    if chute_linha == navio_linha and chute_coluna == navio_coluna:
-        print "PARABÉNS! Acertou mizeravi..."
-        final = True
+    tabuleiro.chute(chute_linha,chute_coluna)
 
-    else:
-        print "Você errou"
-        '''
-        if chute_linha < 0 or chute_coluna < 0 or chute_linha > linhas -1 or chute_coluna > colunas -1:
-            print "Você chutou fora do tabuleiro"
-        else:
-            tabuleiro[chute_linha][chute_coluna] = "X"
-        '''
-
-
-    print_tabuleiro(tabuleiro)
+    tabuleiro.mostra()
