@@ -7,6 +7,8 @@ var estado = {
         
         //carregando imagem do cano
         jogo.load.image('quadrado', 'coisas/pipe.png');
+        
+        jogo.load.image('botao', 'coisas/botao.png');
     },
     
     create: function() {
@@ -39,6 +41,17 @@ var estado = {
         this.pontos = 0;
         
         this.passarinho.anchor.setTo(-0.2, 0.5);
+        
+        //box do final
+        this.box = jogo.add.graphics(0,0);
+        this.box.beginFill('0x000000', 0.5);
+        this.box.drawRect(90, 100, 220, 300);
+        this.box.endFill();
+        this.box.visible = false;
+        
+        //botao do final
+        this.botao = jogo.add.button(140, 350, 'botao', this.reiniciaJogo, this);
+        this.botao.visible = false;
     },
     
     update: function() {
@@ -109,7 +122,12 @@ var estado = {
     },
     
     mostraFinal: function() {
-        this.placar = jogo.add.text(180, 200, this.pontos, {
+        //removendo placar original
+        this.placar.destroy();
+        
+        this.box.visible = true;
+        this.botao.visible = true;
+        this.final = jogo.add.text(170, 200, this.pontos, {
             font: "70px Arial Black",
             fill: "#fff"
         });
