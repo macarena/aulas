@@ -58,20 +58,30 @@ class Tabuleiro:
             print "\nVocê errou!\n"
             self.casas[linha][coluna] = "X"
 
+def vivos(navios):
+    vivos = [n for n in navios if n.vivo]
+    if len(vivos) > 0:
+        return True
+    else:
+        return False
+    
+
 barcos = [Navio("titanic"),Navio("bote"),Navio("caravela")]
 
 print "Vamos jogar batalha naval! UHUUUUU!!!"
 
-final = False
+jogo = True
 
 tabuleiro = Tabuleiro(barcos, 5, 5)
 
 tabuleiro.mostra()
 
-while True:
+while vivos(barcos):
     chute_linha = input("qual linha?") -1
     chute_coluna = input("qual coluna?") -1
 
     tabuleiro.chute(chute_linha,chute_coluna)
 
     tabuleiro.mostra()
+
+print "PARABÉNS, VOCÊ DETONOU!!"
