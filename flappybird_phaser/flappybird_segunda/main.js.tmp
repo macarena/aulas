@@ -1,0 +1,121 @@
+var jogo = new Phaser.Game(400, 490);
+
+var estado = {
+    preload: function () {
+        jogo.load.image('passarinho','assets/Fireball_50x50.png' );
+        
+        jogo.load.image('quadrado' , 'assets/pipe.png');
+        
+        jogo.load.audio('pulo', 'assets/jump.wav');
+    },
+    
+    create: function () {
+        this.somPulo = jogo.add.audio('pulo');
+        
+        jogo.stage.backgroundColor = '#71c5cf';
+        
+        jogo.physics.startSystem(Phaser.Physics.ARCADE);
+        
+        this.passarinho = jogo.add.sprite(100,245,'passarinho');
+        
+        jogo.physics.arcade.enable(this.passarinho);
+        
+        this.passarinho.body.gravity.y  = 1000;
+        
+        var espaco = jogo.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        
+        espaco.onDown.add(this.pulo, this);
+        
+        this.canos = jogo.add.group(); 
+        
+        this.timer = jogo.time.events.loop(1500, this.addCano, this);
+        
+        this.placar = jogo.add.text(20, 20, "0", {
+            font: "70px Arial Black",
+            fill: "#fff"
+        });
+        
+        this.pontos = 0;
+        
+        this.passarinho.anchor.setTo(-0.2, 0.5);
+                
+    },
+        
+    update: function(){
+        
+        if (this.passarinho.y > 490)
+            this.animacaoMorte(); 
+        
+        jogo.physics.arcade.overlap(this.passarinho, this.canos, this.animacaoMorte, null, this);
+        
+        if(this.passarinho.angle < 20)
+            this.passarinho.angle += 1;
+        
+    },
+    
+    reiniciaJogo: function () {
+        jogo.state.start('main');   
+    },
+    
+    pulo: function () {
+        if(this.passarinho.alive && this.passarinho.y > 20) {
+            this.passarinho.body.velocity.y = -350;
+
+            var animacao = jogo.add.tween(this.passarinho);
+
+            animacao.to({angle: -20},100);
+
+            animacao.start();
+            
+            this.somPulo.play();
+        }
+    }, 
+    
+    addQuadrado: function(x,y) {
+        var quadrado = jogo.add.sprite(x,y,'quadrado');
+        
+        this.canos.add(quadrado);
+        
+        jogo.physics.arcade.enable(quadrado);
+        
+        quadrado.body.velocity.x = -200;
+        
+        quadrado.checkWorldBounds = true;
+        quadrado.outOfBoundsKill = true;
+    },
+        
+    addCano: function(){
+        this.pontos += 1;
+        this.placar.text = this.pontos;
+        
+        var buraco= Math.floor (Math.random() * 5) +1;
+        
+        for (var i = 0; i < 8; i++)
+            if (i != buraco && i != buraco + 1)
+                this.addQuadrado(400,10 + i*60);
+    },
+        
+    animacaoMorte: function(){
+        this.passarinho.alive = false;
+        
+        jogo.time.events.remove(this.timer);
+
+        this.canos.forEach(function(quad){
+            quad.body.velocity.x = 0;               
+        }, this);
+        
+        this.mostraFinal();
+    },
+
+    mostraFinal: function() {
+        this.placar = jogo.add.text(200, 200, this.pontos, {
+            font: "70px Arial Black",
+            fill: "#fff"
+        });
+        
+    }
+    
+};
+
+jogo.state.add('main', estado);
+jogo.state.start('main');

@@ -4,7 +4,7 @@ int verdidolly = 11;
 int DYLM = 5;
 int vallorr = 0;
 int tenpu = 0;
-int butum = 0;
+int butum = 3;
 int ystadubutum = 0;
 
 void setup() {
@@ -20,7 +20,7 @@ void loop() {
   vallorr = analogRead(DYLM);
   ystadubutum = digitalRead(butum);
   Serial.print(ystadubutum);
-  Serial.print("teste");
+
   digitalWrite(redi,HIGH);
   vallorr = analogRead(DYLM);
   tenpu = map(vallorr, 0, 1023, 70, 5000);

@@ -18,7 +18,7 @@ class Navio:
 
     def __repr__(self):
         if self.vivo:
-            return "O"
+            return "W"
         else:
             return "!"
 
@@ -42,7 +42,7 @@ class Tabuleiro:
             print " ".join(str(casa) for casa in linha)
 
     def arrumar(self,navio):
-        casa = '_'
+        casa = ''
         while casa != "O":
             linha = randint(0, self.linhas -1)
             coluna = randint(0, self.colunas -1)
