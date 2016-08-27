@@ -9,7 +9,7 @@ var max_batata = 250;
 
 function draw() {
     
-    background(255,255,255);
+    background(0,255,255);
     fill(255,0,0);
     noStroke();
     //essa linha faz uma bola vermelha
