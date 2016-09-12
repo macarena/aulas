@@ -112,7 +112,7 @@ function Navio(nome, tamanho = 1, escala = 50) {
 var tabuleiro;
 var navios = [];
 
-function setup() {
+function setup/() {
 	createCanvas(800,600);
 
 	navios.push(new Navio("titanic"),new Navio("bote"),new Navio("barco"),new Navio("canoa"));

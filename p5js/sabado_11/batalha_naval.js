@@ -7,11 +7,14 @@ function Navio(nome) {
     this.posiciona = function (linha, coluna) {
         this.linha = linha;
         this.coluna = coluna;
+        this.x = coluna * this.escala;
+        this.y = linha * this.escala; 
     }
     
     this.desenha = function () {
         if (this.vivo) {
             //desenhar bola
+            ellipse(this.x,this.y,this.escala,this.escala);
         } else {
             //desenhar X ou bola vermelha
         }
@@ -28,7 +31,7 @@ function Tabuleiro(navios) {
     for (x=0; x<this.colunas; x++) {
         this.casas[x] = [];
         for (y=0; y<this.linhas; y++) {
-            this.casas[x][y] = {tentou: false};
+            this.casas[x][y] = {tentou: false,navio: false};
         }
     }
     
@@ -42,14 +45,28 @@ function Tabuleiro(navios) {
                 rect(x,y,w,h);
             }
         }
-    }  
+    }
+    
+    this.arrumar = function (navio) {
+        do {
+            linha = floor(Math.random() * this.linhas);
+            coluna = floor(Math.random() * this.colunas);
+            casa = this.casas[coluna][linha];
+        } while (casa.navio != false);
+        casa.navio = navio;
+        navio.posiciona(linha,coluna);
+    }
+    
+    for (i=0;i<navios.length;i++) {
+        this.arrumar(navios[i]);
+    }
 }
 var t;
 var n = [];
 
 function setup() {
     createCanvas(800,600);
-    n.push(new Navio("titanic"));
+    n.push(new Navio("titanic"), new Navio("bote"));
     t = new Tabuleiro(n);
 }
 
