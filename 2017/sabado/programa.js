@@ -4,11 +4,13 @@ class Raquete {
         this.y = 10;
         this.w = 20;
         this.h = 80;
+        this.v = 1;
+        this.pts = 0;
         
         if (player) {
-            this.x = 10;
+            this.x = 20;
         } else {
-            this.x = 800 - 10 - this.w;
+            this.x = 800 - 20;
         }
     }
     
@@ -16,10 +18,13 @@ class Raquete {
         if(this.player) {
             this.y = mouseY;
         } else {
-            if (this.y > 0 && this.y < height - this.h) {
-                if (bolinha.vy > 0 ) this.y++;
-                if (bolinha.vy < 0 ) this.y--;
-            }
+            //inteligência artificial
+            if (bolinha.y > this.y && this.y < height) this.y+=this.v;
+            if (bolinha.y < this.y && this.y > 0) this.y-=this.v;
+        }
+        if ((bolinha.x > width && this.player) || (bolinha.x < 0 && !this.player)) {
+            bolinha.reset();
+            this.pts++;
         }
     }
 
@@ -29,15 +34,16 @@ class Raquete {
             bolinha.bate();
         }
         rect(this.x,this.y,this.w,this.h);
+        text(this.pts, 20,height/2);
     }
     
     bateu() {
         //verificando X
-        var distancia = this.w + bolinha.d/2;
-        if(bolinha.x >= this.x && bolinha.x <= this.x + distancia ) 
-        {   
+        var distx = (this.w + bolinha.d)/2;
+        if(Math.abs(bolinha.x - this.x) < distx) {   
             //verificando y
-            if(bolinha.y >= this.y && bolinha.y + this.h) {
+            var disty = (this.h + bolinha.d)/2;
+            if(Math.abs(bolinha.y - this.y) < disty) {
                 return true;
             }
         }
@@ -47,8 +53,8 @@ class Raquete {
 bolinha = {
     x: 0,
     y: 0,
-    vx: -2,
-    vy: -2,
+    vx: -4,
+    vy: -4,
     d: 20,
     desenha: function() {
         this.movimenta();
@@ -79,6 +85,8 @@ function setup() {
     stroke('white');
     strokeWeight(1);
     bolinha.reset();
+    rectMode(CENTER);
+    textSize(94);
 }
 
 function draw() {
