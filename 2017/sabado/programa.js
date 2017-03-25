@@ -3,14 +3,16 @@ class Raquete {
         this.player = player;
         this.y = 10;
         this.w = 20;
-        this.h = 80;
-        this.v = 1;
+        this.h = 100;
+        this.v = 3;
         this.pts = 0;
         
         if (player) {
             this.x = 20;
+            this.px = 50;
         } else {
             this.x = 800 - 20;
+            this.px = 680;
         }
     }
     
@@ -19,9 +21,12 @@ class Raquete {
             this.y = mouseY;
         } else {
             //inteligência artificial
-            if (bolinha.y > this.y && this.y < height) this.y+=this.v;
-            if (bolinha.y < this.y && this.y > 0) this.y-=this.v;
+            if (bolinha.y > this.y && this.y < height - this.h/2)
+                this.y+=this.v;
+            if (bolinha.y < this.y && this.y > this.h/2)
+                this.y-=this.v;
         }
+        //pontos
         if ((bolinha.x > width && this.player) || (bolinha.x < 0 && !this.player)) {
             bolinha.reset();
             this.pts++;
@@ -34,7 +39,7 @@ class Raquete {
             bolinha.bate();
         }
         rect(this.x,this.y,this.w,this.h);
-        text(this.pts, 20,height/2);
+        text(this.pts, this.px,height/2);
     }
     
     bateu() {
@@ -82,8 +87,8 @@ p2 = new Raquete();
 
 function setup() {
     createCanvas(800,600);
-    stroke('white');
-    strokeWeight(1);
+    noStroke();
+    fill(255);
     bolinha.reset();
     rectMode(CENTER);
     textSize(94);
