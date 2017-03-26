@@ -15,33 +15,31 @@ var quadradinho = {
         this.y = lin * this.s;
     },
     d: function() {
-        if (mouseIsPressed) {
-            this.c();
-        }
-        
         if (!this.revelado) {
-            fill(120,180,255);
-            rect(this.x,this.y,this.s,this.s);
+            stroke(0);
+            if (this.marcado) {
+                fill(255,80,50);
+                rect(this.x,this.y,this.s,this.s);
+            } else {
+                fill(120,180,255);
+                rect(this.x,this.y,this.s,this.s);
+            }
         } else if (this.bomba) {
-            fill(255,80,50);
-            rect(this.x,this.y,this.s,this.s);
-        } else if (this.proximidade > 0) {
-            fill(255);
-            stroke(200);
-            rect(this.x,this.y,this.s,this.s);
-            fill(0);
-            text(this.proximidade, this.x + this.s/2, this.y+this.s-5);
+            console.log("Game Over");
         } else {
             fill(255);
             stroke(200);
             rect(this.x,this.y,this.s,this.s);
+            if (this.proximidade > 0) {
+                fill(0);
+                text(this.proximidade, this.x + this.s/2, this.y+this.s-5);
+            }
         }
     },
-    c: function() {
-        col = int(clicado.x / this.s);
-        lin = int(clicado.y / this.s);
-
-        if (col == this.col && lin == this.lin) {
+    c: function(marcar = false) {
+        if (marcar) {
+            this.marcado = !this.marcado;
+        } else {
             this.revelar();
         }
     },
@@ -78,18 +76,17 @@ var quadradinho = {
     }
 };
 
+var tamanho = 25;
 var tabuleiro = [];
-
 var colunas = 20;
 var linhas = 20;
-
-var clicado = {x: -1, y: -1};
 var qtb = 40;
 
 for (c = 0; c < colunas; c++){
     for (l = 0; l < linhas; l++){
         q = Object.create(quadradinho);
         q.goto(c,l);
+        q.s = tamanho;
         tabuleiro.push(q);
     }
 }
@@ -115,7 +112,7 @@ function setup() {
     textAlign(CENTER);
 }
 
-function draw() {
+function draw() {  
     background(255);
     tabuleiro.forEach(function(q) {
         q.d();
@@ -123,11 +120,25 @@ function draw() {
 }
 
 function mousePressed() {
-    clicado.x = mouseX;
-    clicado.y = mouseY;
+    col = int(mouseX / tamanho);
+    lin = int(mouseY / tamanho);
+    
+    tabuleiro.forEach(function(q) {
+        if (col == q.col && lin == q.lin) {
+            q.c();
+        }
+    });
 }
 
-function mouseReleased() {
-    clicado.x = -1;
-    clicado.y = -1;
+function keyPressed() {
+    if (keyCode == 32) {
+        col = int(mouseX / tamanho);
+        lin = int(mouseY / tamanho);
+
+        tabuleiro.forEach(function(q) {
+            if (col == q.col && lin == q.lin) {
+                q.c(true);
+            }
+        });
+    }
 }
