@@ -28,13 +28,13 @@ colunas = 30
 tabuleiro = []
 clicado = [-1,-1]
 
-qtb = 40
+qtb = 300
 
 for col in range(colunas):
     for lin in range(linhas):
         tabuleiro.append(quadrado(col,lin))
 
-for n in range(qtb):
+while sum(q.bomba for q in tabuleiro) < qtb:
     aleatorio = randint(0,len(tabuleiro))
     tabuleiro[aleatorio].bomba = True
 
