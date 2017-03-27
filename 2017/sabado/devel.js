@@ -69,10 +69,12 @@ var quadradinho = {
         return lista;
     },
     colocaBomba: function() {
-        this.bomba = true;
-        this.perto().forEach(function(q){
-           q.proximidade += 1; 
-        });
+        if (!this.bomba) {
+            this.bomba = true;
+            this.perto().forEach(function(q){
+               q.proximidade += 1; 
+            });
+        }
     }
 };
 
