@@ -25,12 +25,11 @@ function Tabuleiro(navios) {
 	}
 
 	this.arrumar = function(navio) {
-		var casa = false;
 		do {
 			linha = floor(Math.random()*this.linhas);
 			coluna = floor(Math.random()*this.colunas);
 			casa = this.casas[coluna][linha];
-		} while (casa == true);
+		} while (casa.navio == true);
 		this.casas[coluna][linha] = navio;
 		navio.posiciona(linha, coluna);
 	}
@@ -40,30 +39,30 @@ function Tabuleiro(navios) {
 	}
 
 	this.chute = function(x,y) {
-		console.log("Você chutou "+this.tentativas+" vezes");
+		m.mensagem("Você chutou "+this.tentativas+" vezes");
 		linha = Math.floor(x/this.escala);
 		coluna = Math.floor(y/this.escala);
-		console.log('chutando em ' + linha + '|' + coluna);
+		m.mensagem('chutando em ' + linha + '|' + coluna);
 
 		if (this.fora(linha,coluna)) {
-			console.log("Você chutou fora do tabuleiro");
+			m.mensagem("Você chutou fora do tabuleiro");
 			return;
 		}
 
 		if (this.repetido(linha,coluna)) {
-			console.log("Você já tentou aí");
+			m.mensagem("Você já tentou aí");
 			return;
 		}
 
 		this.tentativas++;
 
-		console.log("Tiro disparado...");
+		m.mensagem("Tiro disparado...");
 
 		if (this.casas[linha][coluna] instanceof Navio) {
-			console.log("Parabéns!");
+			m.mensagem("Parabéns!");
 			this.casas[linha][coluna].vivo = false;
 		} else {
-			console.log("Você errou!");
+			m.mensagem("Você errou!");
 			this.casas[linha][coluna].tentou = true;
 		}
 	}
@@ -109,14 +108,30 @@ function Navio(nome, tamanho = 1, escala = 50) {
 	}
 }
 
+function Mural () {
+	this.texto = [];
+	this.mensagem = function (texto) {
+		this.texto += texto + '\n';
+	}
+	this.desenha = function () {
+		text(this.texto, 510,10,790,200);
+	}
+}
+
 var tabuleiro;
 var navios = [];
 
+<<<<<<< HEAD
+function setup() {
+	createCanvas(800,501);
+=======
 function setup/() {
 	createCanvas(800,600);
+>>>>>>> 4145c7ff2fd23f630f0ec7e472711ef0a48d1c6c
 
 	navios.push(new Navio("titanic"),new Navio("bote"),new Navio("barco"),new Navio("canoa"));
 	tabuleiro = new Tabuleiro(navios);
+	m = new Mural();
 }
 
 function draw() {
@@ -127,6 +142,7 @@ function draw() {
 	navios.forEach(function(navio){
 		navio.desenha();
 	});
+	m.desenha();
 }
 
 function mouseClicked() {
