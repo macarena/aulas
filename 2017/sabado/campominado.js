@@ -14,11 +14,11 @@ var quadradinho = {
         this.y = lin * this.s;
     },
     d: function() {
-        if (!this.relevado) {
+        if (!this.revelado) {
             fill(120,180,255);
             rect(this.x,this.y,this.s,this.s);
         }
-    },
+    }
 };
 
 var tabuleiro = [];
@@ -51,8 +51,8 @@ function mousePressed() {
 }
 
 function verificaClique(q) {
-    cliqueX = int(mouseX / q.s);
-    cliqueY = int(mouseY / q.s);
+    cliqueX = Math.floor(mouseX / q.s);
+    cliqueY = Math.floor(mouseY / q.s);
 
     if (cliqueX == q.col && cliqueY == q.lin) {
         q.revelado = true;
