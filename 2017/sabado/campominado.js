@@ -1,5 +1,5 @@
 var quadradinho = {
-    s: 20,
+    s: 25,
     bomba: false,
     proximidade: 0,
     revelado: false,
@@ -18,7 +18,7 @@ var quadradinho = {
             fill(120,180,255);
             rect(this.x,this.y,this.s,this.s);
         }
-    }
+    },
 };
 
 var tabuleiro = [];
@@ -44,4 +44,17 @@ function draw() {
     tabuleiro.forEach(function(q) {
         q.d();
     });
+}
+
+function mousePressed() {
+    tabuleiro.forEach(verificaClique);
+}
+
+function verificaClique(q) {
+    cliqueX = int(mouseX / q.s);
+    cliqueY = int(mouseY / q.s);
+
+    if (cliqueX == q.col && cliqueY == q.lin) {
+        q.revelado = true;
+    }
 }
