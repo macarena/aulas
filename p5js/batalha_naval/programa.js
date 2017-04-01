@@ -121,8 +121,13 @@ function Mural () {
 var tabuleiro;
 var navios = [];
 
+<<<<<<< HEAD
 function setup() {
 	createCanvas(800,501);
+=======
+function setup/() {
+	createCanvas(800,600);
+>>>>>>> 4145c7ff2fd23f630f0ec7e472711ef0a48d1c6c
 
 	navios.push(new Navio("titanic"),new Navio("bote"),new Navio("barco"),new Navio("canoa"));
 	tabuleiro = new Tabuleiro(navios);
