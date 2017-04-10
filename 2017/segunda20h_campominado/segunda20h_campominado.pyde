@@ -19,8 +19,9 @@ class quadrado:
         else:
             fill(255)
             rect(self.x,self.y,self.s,self.s)
-            fill(0)
-            text(self.vizinhos,self.x+self.s/2,self.y+self.s - 5)
+            if self.vizinhos > 0 : 
+                fill(0)
+                text(self.vizinhos,self.x+self.s/2,self.y+self.s - 5)
         if self.bomba:
             fill(255,0,0)
             rect(self.x,self.y,self.s,self.s)
@@ -28,9 +29,22 @@ class quadrado:
     def colocaBomba(self):
         if not self.bomba:
             self.bomba = True
-            for q in tabuleiro:
-                if q.col >= self.col-1 and q.col <= self.col+1 and q.lin >= self.lin-1 and q.lin <= self.lin+1 and not (self.col == q.col and self.lin == q.lin):
-                    q.vizinho += 1
+            for q in self.meusVizinhos():
+                q.vizinhos += 1
+                    
+    def revelar(self):
+        if not self.revelado:
+            self.revelado = True
+            if self.vizinhos == 0:
+                for q in self.meusVizinhos():
+                    q.revelar()
+
+    def meusVizinhos(self):
+        viz = []
+        for q in tabuleiro:
+            if q.col >= self.col-1 and q.col <= self.col+1 and q.lin >= self.lin-1 and q.lin <= self.lin+1 and not (self.col == q.col and self.lin == q.lin):
+                viz.append(q)
+        return viz
             
 linhas = 20
 colunas = 30
@@ -46,7 +60,6 @@ for col in range(colunas):
 
 while sum(q.bomba for q in tabuleiro) < qtb:
     aleatorio = randint(0,len(tabuleiro)-1)
-    #tabuleiro[aleatorio].bomba = True
     tabuleiro[aleatorio].colocaBomba()
 
 def setup():
@@ -59,7 +72,7 @@ def draw():
 
     for quadrado in tabuleiro:
         if clicado[0] == quadrado.col and clicado[1] == quadrado.lin:
-            quadrado.revelado = True
+            quadrado.revelar()
         quadrado.desenha()
     
 def mouseClicked():
