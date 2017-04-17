@@ -4,9 +4,11 @@ class bolinha():
     v = 1
     d = 20
     
-    def __init__(self, x, y):
+    def __init__(self, x, y,limite):
         self.x = x
         self.y = y
+        self.le = limite.xe
+        self.ld = limite.xd
         
     def desenha(self):
         self.move()
@@ -14,6 +16,8 @@ class bolinha():
         
     def move(self):
         self.x += self.v
+        if self.x < self.le or self.x > self.ld:
+            print 'bolinha morreu'
 
     def muda(self):
         self.v *= -1
