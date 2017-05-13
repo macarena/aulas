@@ -3,10 +3,14 @@ from random import randint
 class bolinha():
     v = 1
     d = 20
+    le = 0
+    ld = 800
     
-    def __init__(self, x, y,limite):
+    def __init__(self, x, y):
         self.x = x
         self.y = y
+        
+    def novoLimite(self, limite):
         self.le = limite.xe
         self.ld = limite.xd
         
@@ -33,8 +37,27 @@ class limite():
         line(self.xe,self.y,self.xd,self.y)
 
 class plataforma():
-    limites = []
+    limites = [ limite(350,450,0) ]
+    dir = 1
+    tam = 0
     
+    def addLimite(self):
+        u = self.limites[-1]
+        xe = u.xe + self.dir
+        xd = u.xd + self.dir
+        self.limites.append(limite(xe,xd, 0))
+        self.tam -= 1
+            
+        if self.tam <= 0:
+            self.tam = randint(50,150)
+            self.dir *= -1
+            
+        if len(self.limites) > 600:
+            del self.limites[0]
+    
+    
+    '''
+    Antigo método construtor
     def __init__(self,xe,xd):
         dir = -1
         tam = 0
@@ -47,22 +70,31 @@ class plataforma():
             if tam <= 0:
                 tam = randint(50,150)
                 dir *= -1
+    '''
+            
             
     def desenha(self):
+        self.addLimite()
         for l in self.limites:
             l.y += 1
+            if l.y == b.y:
+                b.novoLimite(l)
             l.desenha()
 
+p = plataforma()
 b = bolinha(400,500)
-p = plataforma(350,450)
 
 def setup():
     size(800,600)
     
 def draw():
+    print(len(p.limites))
     background(255)
     p.desenha()
     b.desenha()
+    stroke(0)
+    line(b.le, b.y-10, b.le, b.y+10)
+    line(b.ld, b.y-10, b.ld, b.y+10)
     
 def mousePressed():
     b.muda()

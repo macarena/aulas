@@ -5,6 +5,7 @@ class quadrado:
     bomba = False
     vizinhos = 0
     s = 25
+    marcado = False 
     
     def __init__(self, col, lin):
         self.col = col
@@ -15,6 +16,9 @@ class quadrado:
     def desenha(self):
         if not self.revelado:
             fill(120,180,255)
+            if self.marcado:
+                image(flagimg, self.x, self.y, 25, 25)
+                noFill()
             rect(self.x,self.y,self.s,self.s)
         else:
             fill(255)
@@ -37,6 +41,7 @@ class quadrado:
         global gameover
         if not self.revelado:
             self.revelado = True
+            self.marcado = False
             if self.vizinhos == 0 and not self.bomba:
                 for q in self.meusVizinhos():
                     q.revelar()
@@ -45,6 +50,14 @@ class quadrado:
                     if q.bomba:
                         q.revelar()
                 gameover = True
+                
+    def marcar(self):
+        qtm = sum(q.marcado for q in tabuleiro)
+        if not self.revelado:
+            if self.marcado:
+                self.marcado = False
+            elif qtm < qtb:
+                self.marcado = True
 
     def meusVizinhos(self):
         viz = []
@@ -59,11 +72,12 @@ colunas = 30
 tabuleiro = []
 clicado = [-1,-1]
 gameover = False
+vitoria = False
 
-qtb = 100
+qtb = 5
 
-for col in range(colunas):
-    for lin in range(linhas):
+for lin in range(linhas):
+    for col in range(colunas):
         tabuleiro.append(quadrado(col,lin))
 
 while sum(q.bomba for q in tabuleiro) < qtb:
@@ -71,29 +85,44 @@ while sum(q.bomba for q in tabuleiro) < qtb:
     tabuleiro[aleatorio].colocaBomba()
 
 def setup():
-    global bombaimg
+    global bombaimg, flagimg
     
     size(800,600)
     textAlign(CENTER)
-    textSize(16)
+
     bombaimg = loadImage('bomba.jpg')
+    flagimg = loadImage('flag.png')
 
 def draw():
-    if not gameover:
-        background(255)
-    
-        for quadrado in tabuleiro:
-            if clicado[0] == quadrado.col and clicado[1] == quadrado.lin:
-                quadrado.revelar()
-            quadrado.desenha()
-    else:
+    background(255)
+    textSize(16)
+    corretas = 0
+    for quadrado in tabuleiro:
+        if clicado[0] == quadrado.col and clicado[1] == quadrado.lin:
+            quadrado.revelar()
+        quadrado.desenha()
+    if gameover:
         textSize(120)
         fill(255,0,0)
         text("Game Over", width/2, height/2)
+    if vitoria:
+        textSize(120)
+        fill(0,255,0)
+        text("Parabéns", width/2, height/2)
     
 def mouseClicked():
     global clicado
     col = int(mouseX / 25)
     lin = int(mouseY / 25)
     
-    clicado = [col,lin]
+    if not gameover:
+        clicado = [col,lin]
+        
+def keyPressed():
+    if key == ' ' and not gameover:
+        col = int(mouseX / 25)
+        lin = int(mouseY / 25)
+        
+        for q in tabuleiro:
+            if col == q.col and lin == q.lin:
+                q.marcar()

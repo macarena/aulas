@@ -17,11 +17,45 @@ var quadradinho = {
     d: function() {
         if (!this.revelado) {
             fill(120,180,255);
+            rect(this.x,this.y,this.s,this.s);
         } else {
             fill(255);
             if (this.bomba) { fill(255,0,0); }
+            rect(this.x,this.y,this.s,this.s);
+            if (this.proximidade > 0) {
+                fill(0);
+                text(this.proximidade, this.x + this.s/2, this.y + this.s/2);
+            }
         }
-        rect(this.x,this.y,this.s,this.s);
+    },
+    vizinhos: function() {
+        vizinhos = [];
+        for (i = 0; i < tabuleiro.length; i++) {
+            if ((tabuleiro[i].col >= this.col-1 && tabuleiro[i].col <= this.col +1) && (tabuleiro[i].lin >= this.lin-1 && tabuleiro[i].lin <= this.lin +1) && !(tabuleiro[i].lin == this.lin && tabuleiro[i].col == this.col)) {
+                vizinhos.push(tabuleiro[i]);
+            }
+        }
+        return vizinhos;
+    },
+    revelar: function() {
+        if(!this.revelado && !this.bomba) {
+            this.revelado = true;
+            if(this.proximidade == 0) {
+                vizinhos = this.vizinhos();
+                vizinhos.forEach(function(q){
+                    q.revelar();
+                });
+            }
+        }
+        
+        if(this.bomba && !this.revelado) {
+            this.revelado = true;
+            tabuleiro.forEach(function(q) {
+               if(q.bomba) {
+                   q.revelar();
+               } 
+            });
+        }
     }
 };
 
@@ -51,12 +85,17 @@ while (qtb > 0) {
     var qbomba = Math.floor(aleatorio);
     if(!tabuleiro[qbomba].bomba) {
         tabuleiro[qbomba].bomba = true;
+        vizinhos = tabuleiro[qbomba].vizinhos();
+        vizinhos.forEach(function(v) {
+            v.proximidade++;
+        });
         qtb--;
     }
 }
 
 function setup() {
     createCanvas(800,600);
+    textAlign(CENTER,CENTER);
 }
 
 function draw() {
@@ -64,7 +103,8 @@ function draw() {
     //loop para desenhar os quadradinhos do tabuleiro
     tabuleiro.forEach(function(q) {
         q.d();
-    });
+    });    textAlign(CENTER,CENTER);
+
 }
 
 function mousePressed() {
@@ -76,6 +116,7 @@ function verificaClique(q) {
     cliqueY = Math.floor(mouseY / q.s);
 
     if (cliqueX == q.col && cliqueY == q.lin) {
-        q.revelado = true;
+        //q.revelado = true;
+        q.revelar();
     }
 }
