@@ -1,17 +1,15 @@
-class pCorpo():
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-
 class Cobra():
     s = 10
     cor = color(0,255,0)
+    corpo = []
+    dir = PVector(1,0)
     
     def __init__(self):
-        self.corpo = [pCorpo(10,40)]
-        self.corpo.append(pCorpo(10 -1, 40 ))
-        self.corpo.append(pCorpo(10 -2, 40 ))
-        self.corpo.append(pCorpo(10 -3, 40 ))
+        x = 10
+        y = 40
+        
+        for i in range(10):
+            self.corpo.append(PVector(x-i,y))
         
     def desenha(self):
         self.anda()
@@ -21,8 +19,7 @@ class Cobra():
         
             
     def anda(self):
-        x = self.corpo[0].x + 1
-        y = self.corpo[0].y
-        self.corpo.insert(0,pCorpo(x,y))
+        novo = self.corpo[0] + self.dir
+        self.corpo.insert(0,novo)
         del(self.corpo[-1])
             
