@@ -44,6 +44,7 @@ var quadradinho = {
     revelar: function() {
         if(!this.revelado && !this.bomba) {
             this.revelado = true;
+            this.marcado = false;
             if(this.proximidade == 0) {
                 vizinhos = this.vizinhos();
                 vizinhos.forEach(function(q){
@@ -57,28 +58,25 @@ var quadradinho = {
             tabuleiro.forEach(function(q) {
                if(q.bomba) {
                    q.revelar();
-               } 
+               }
             });
+            gameover = true;
         }
     },
     desarmar: function() {
-        console.log("desarmando...");
-        console.log(this);
-        marcadas = 0;
-        for(i = 0; i < tabuleiro.length; i++) {
-            if (tabuleiro[i].marcado) {
-                marcadas++;
+        if (this.marcado) {
+            this.marcado = false;
+        } else {
+            if (marcadas < qtb && !this.revelado) {
+                this.marcado = true;
             }
-        }
-        console.log(marcadas);
-        if (marcadas < qtb) {
-            this.marcado = true;
         }
     }
 };
 
 //tabuleiro vazio
 var tabuleiro = [];
+var gameover = false;
 
 //info de quantas colunas e quantas linha eu quero
 var colunas = 20;
@@ -121,16 +119,43 @@ function setup() {
 }
 
 function draw() {
+    marcadas = 0;
+    for(i = 0; i < tabuleiro.length; i++) {
+        if (tabuleiro[i].marcado) {
+            marcadas++;
+        }
+    }
+    
     background(255);
+    textAlign(CENTER,CENTER);
     //loop para desenhar os quadradinhos do tabuleiro
+    textSize(12);
     tabuleiro.forEach(function(q) {
         q.d();
-    });    textAlign(CENTER,CENTER);
-
+    });
+    
+    textAlign(LEFT,CENTER);
+    fill(0);
+    text(qtb + " bombas no tabuleiro", 520, 20);
+    text(marcadas + " bombas marcadas", 520, 40);
+    
+    
+    textAlign(CENTER,CENTER);
+    if (gameover) {
+        textSize(80);
+        fill(255,0,0);
+        text("Game Over",width/2,height/2);
+    }
+    
+    if(verificaVitoria()) {
+        textSize(80);
+        fill(255,0,0);
+        text("You WON",width/2,height/2);
+    }
 }
 
 function mousePressed() {
-    tabuleiro.forEach(verificaClique);
+    if (!gameover) tabuleiro.forEach(verificaClique);
 }
 
 function verificaClique(q) {
@@ -141,7 +166,6 @@ function verificaClique(q) {
         //q.revelado = true;
         q.revelar();
     }
-
 }
 
 function verificaDesarme(q) {
@@ -154,7 +178,24 @@ function verificaDesarme(q) {
 }
 
 function keyPressed() {
-    if(key == ' ') {
+    if (key == ' ' && !gameover) {
         tabuleiro.forEach(verificaDesarme);
     }
+}
+
+function verificaVitoria() {
+    listabombas = [];
+    for(i=0;i<tabuleiro.length;i++) {
+        if(tabuleiro[i].bomba) {
+            listabombas.push(tabuleiro[i]);
+        }
+    }
+
+    for(i=0;i<listabombas.length;i++) {
+        if(!listabombas[i].marcado) {
+            return false;
+        }
+    }
+    
+    return true;
 }

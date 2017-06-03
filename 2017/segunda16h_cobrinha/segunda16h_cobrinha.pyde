@@ -1,14 +1,20 @@
 from cobra import *
-
-c = Cobra()
+from comida import *
+from muro import *
 
 def setup():
+  global f, c, m
   size(600,600)
   frameRate(10)
-
+  f = Comida(width,height)
+  c = Cobra(f,width,height)
+  m = Muro(width,height)
+  
 def draw():
   background(0)
   c.desenha()
+  f.desenha()
+  m.desenha()
   
 def keyPressed():
     if keyCode == 37 and c.dir != PVector(1,0):

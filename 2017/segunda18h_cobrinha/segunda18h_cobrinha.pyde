@@ -1,14 +1,19 @@
 from cobra import *
+from comida import *
 
-c = Cobra()
+tamanho = 10
 
 def setup():
+    global f, c
     size(600,600)
     frameRate(10)
+    f = Comida(tamanho, width, height)
+    c = Cobra(tamanho, f, width, height)
     
 def draw():
     background(0)
     c.desenha()
+    f.desenha()
     
 def keyPressed():
     esquerda = PVector(-1,0)
@@ -19,13 +24,12 @@ def keyPressed():
     if keyCode == 37 and c.dir != direita:
         #esquerda
         c.dir = esquerda
-    if keyCode == 38 and c.dir != baixo:
+    elif keyCode == 38 and c.dir != baixo:
         #cima
         c.dir = cima
-    if keyCode == 39 and c.dir != esquerda:
+    elif keyCode == 39 and c.dir != esquerda:
         #direita
         c.dir = direita
-    if keyCode == 40 and c.dir != cima:
+    elif keyCode == 40 and c.dir != cima:
         #baixo
         c.dir = baixo
-        
