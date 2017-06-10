@@ -6,15 +6,16 @@ def setup():
   global f, c, m
   size(600,600)
   frameRate(10)
-  f = Comida(width,height)
-  c = Cobra(f,width,height)
   m = Muro(width,height)
+  f = Comida(m,width,height)
+  c = Cobra(f,m,width,height)
   
 def draw():
   background(0)
+  m.desenha()
   c.desenha()
   f.desenha()
-  m.desenha()
+  
   
 def keyPressed():
     if keyCode == 37 and c.dir != PVector(1,0):

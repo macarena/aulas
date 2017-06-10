@@ -13,6 +13,16 @@ class Muro:
                 self.estrutura.append(PVector(x,y))
                 y = h - self.s
                 self.estrutura.append(PVector(x,y))
+        
+        lins = h/self.s
+        lista = range(lins/3, 2*lins/3)
+        for i in range(lins):
+            if not i in lista:
+                y = i * self.s
+                x = 0
+                self.estrutura.append(PVector(x,y))
+                x = w - self.s
+                self.estrutura.append(PVector(x,y))
             
     def desenha(self):
         for tijolo in self.estrutura:
