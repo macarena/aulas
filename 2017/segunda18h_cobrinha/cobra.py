@@ -4,9 +4,10 @@ class Cobra:
     dir = PVector(1,0)
     cresce = 0
     
-    def __init__(self, tamanho, comida, w, h):
+    def __init__(self, tamanho, comida, muro, w, h):
         self.s = tamanho
         self.comida = comida
+        self.muro = muro.estrutura
         x= w / 2 / self.s
         y= h / 2 / self.s
         self.tela = PVector(w,h) / self.s
@@ -33,6 +34,23 @@ class Cobra:
         else:
             self.cresce -= 1
         
+        #se sair da tela
+        #pela direita
+        if self.corpo[0].x >= self.tela.x:
+            self.corpo[0].x = 0
+        
+        #pela esquerda
+        if self.corpo[0].x < 0:
+            self.corpo[0].x = self.tela.x -1
+
+        #por baixo
+        if self.corpo[0].y >= self.tela.y:
+            self.corpo[0].y = 0
+        
+        #por cima
+        if self.corpo[0].y < 0:
+            self.corpo[0].y = self.tela.y -1
+            
         #se ela comeu a comida
         if self.corpo[0] * self.s == self.comida.pos:
             self.comida.mudaPos()
@@ -43,25 +61,9 @@ class Cobra:
             if self.corpo[0] == p:
                 #fazer o gameover
                 self.cor = color(100,200,150)
-                
-        #se sair da tela
-        #pela direita
-        if self.corpo[0].x >= self.tela.x:
-            self.corpo[0].x = 0
         
-        #pela esquerda
-        if self.corpo[0].x < 0:
-            self.corpo[0].x = self.tela.x
-
-        #por baixo
-        if self.corpo[0].y >= self.tela.y:
-            self.corpo[0].y = 0
-        
-        #por cima
-        if self.corpo[0].y < 0:
-            self.corpo[0].y = self.tela.y
-            
-            
-            
-            
-            
+        #se ela bateu no muro
+        for tijolo in self.muro:
+            if self.corpo[0] == tijolo:
+                #fazer o gameover
+                self.cor = color(100,200,150)

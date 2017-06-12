@@ -1,19 +1,22 @@
 from cobra import *
 from comida import *
+from muro import *
 
 tamanho = 10
 
 def setup():
-    global f, c
+    global f, c, m
     size(600,600)
     frameRate(10)
+    m = Muro(tamanho,width,height)
     f = Comida(tamanho, width, height)
-    c = Cobra(tamanho, f, width, height)
+    c = Cobra(tamanho, f, m, width, height)
     
 def draw():
     background(0)
     c.desenha()
     f.desenha()
+    m.desenha()
     
 def keyPressed():
     esquerda = PVector(-1,0)
