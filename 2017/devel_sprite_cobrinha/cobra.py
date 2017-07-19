@@ -2,7 +2,11 @@ class Cobra:
     s = 10
     cor = color(0,255,0)
     corpo = []
-    dirs = [PVector(1,0), PVector(-1,0), PVector(0,1), PVector(0,-1)]
+    esquerda = PVector(-1,0)
+    direita = PVector(1,0)
+    baixo = PVector(0,1)
+    cima = PVector(0,-1)
+    dirs = [direita, esquerda, baixo, cima]
     crescimento = 0
     tam = 4
     

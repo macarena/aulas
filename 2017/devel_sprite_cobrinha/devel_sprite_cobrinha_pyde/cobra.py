@@ -49,14 +49,14 @@ class Cobra:
                 angulo = PVector.angleBetween(dif1,dif2)
                 if degrees(angulo) == 90:
                     angulo = PVector.angleBetween(PVector(0,-1),dif1)
-                    rotate(angulo)
+                    #rotate(angulo)
                     img = self.turn
                 else:
                     img = self.body
             
 
             
-            image(img,0,0)
+            image(img,0,0,self.s,self.s)
             popMatrix()
             
     def anda(self):
