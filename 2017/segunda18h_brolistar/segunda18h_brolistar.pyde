@@ -1,22 +1,26 @@
 #Brólistar - A estrelinha briguenta
 
-bx = 0
-by = 0
+w = 300
+h = 300
+
+bx = w/2
+by = h/2
+bs = 10
 vel = 10
 
-w = 500
-h = 800
-
 def setup():
-    size(100,100, P3D)
+    size(400,400, P3D)
     
 def draw():
     background(0)
     fill(0,255,0)
-    rect(0,0,w,h)
+    rect(0,0,w,h/2)
+    
+    fill(0,0,255)
+    rect(0,h/2,w,h/2)
     
     fill(255,0,0)
-    ellipse(bx,by,10,10)
+    ellipse(bx,by,bs,bs)
     
     camera(bx, by,100, #olho
          bx,by,1, #bola
@@ -24,7 +28,7 @@ def draw():
 
     
 def keyPressed():
-    global bx, by, vel
+    global bx, by
     
     if keyCode == 37:
         bx -= vel
@@ -34,3 +38,6 @@ def keyPressed():
         bx += vel
     if keyCode == 40:
         by += vel
+        
+    bx = constrain(bx,bs/2,w - bs/2)
+    by = constrain(by,bs/2,h - bs/2)
