@@ -1,5 +1,5 @@
 tamanho = 600;
-escala = 14;
+escala = 10;
 
 function setup() {
     createCanvas(tamanho,tamanho);
@@ -9,6 +9,7 @@ function setup() {
         cor: color(255,0,0),
         corpo: [],
         dir: createVector(0,0),
+        viva: true,
         cria: function() {
             for(i=0;i<40;i++) {
                 x = tamanho / 2 + i*escala;
@@ -20,7 +21,7 @@ function setup() {
         },
         desenha: function() {
             fill(this.cor);
-            this.anda();
+            if (this.viva) this.anda();
             for(i=0;i<this.corpo.length;i++) {
                 q = this.corpo[i];
                 rect(q.x,q.y,escala,escala);
@@ -32,6 +33,28 @@ function setup() {
             this.corpo.unshift(q);
             
             this.corpo.splice(-1,1);
+            
+            //teletransporte
+            if (this.corpo[0].x < 0) {
+                this.corpo[0].x = tamanho - escala;
+            }
+            if (this.corpo[0].x >= tamanho) {
+                this.corpo[0].x = 0;
+            }
+            if (this.corpo[0].y < 0) {
+                this.corpo[0].y = tamanho - escala;
+            }
+            if (this.corpo[0].y >= tamanho) {
+                this.corpo[0].y = 0;
+            }
+            
+            //morreu batendo nela mesma
+            for(i=1;i<this.corpo.length;i++) {
+                if(this.corpo[0].dist(this.corpo[i]) == 0) {
+                    this.viva = false;
+                    this.cor = color(0,0,255);
+                }
+            }
         },
         setDir: function(d) {
             angulo = degrees(p5.Vector.angleBetween(this.dir,d));
@@ -51,7 +74,7 @@ function setup() {
 
     cobrinha.cria();
     
-}
+}   
 
 function draw() {
     background(0);
