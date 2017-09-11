@@ -3,14 +3,16 @@ from personagem import *
 
 w = 300
 h = 300
-player = Personagem(w/2,h/2,w,h)
+player = Personagem(w/2,h/2,w,h, "link.png")
 
 def setup():
     size(400,400, P3D)
+    player.setSprite()
     
 def draw():
-    camera(player.x, player.y,100, #olho
-        player.x,player.y,1, #bola
+    cx, cy = cameraMov(player.x, player.y, w, h)
+    camera(cx,cy,100, #olho
+        cx,cy,1, #bola
         0, 1, 0); #up
     
     background(0)
@@ -28,7 +30,7 @@ def keyReleased():
     player.move(keyCode,True)
     
 def cameraMov(x,y,w,h):
-    margem = 140
+    margem = 55
     x = constrain(x, margem, w-margem)
     y = constrain(y, margem, h-margem)
     

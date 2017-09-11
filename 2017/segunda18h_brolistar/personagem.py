@@ -1,6 +1,8 @@
+from sprite import Sprite
+
 class Personagem:
     
-    def __init__(self,x,y,w,h):
+    def __init__(self,x,y,w,h,img_url):
         self.x = x
         self.y = y
         self.w = w
@@ -9,10 +11,15 @@ class Personagem:
         self.vel = 10
         self.vx = 0
         self.vy = 0
+        self.img_url = img_url
+        
+    def setSprite(self):
+        self.img = Sprite(self.img_url)
     
     def desenha(self):
         fill(255,0,0)
-        ellipse(self.x,self.y,self.s,self.s)
+        #ellipse(self.x,self.y,self.s,self.s)
+        self.img.desenha(self.x, self.y)
     
     def move(self, tecla, para = False):
         if para:
