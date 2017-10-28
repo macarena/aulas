@@ -1,4 +1,4 @@
-#coding: utf-8
+
 
 class Mensageiro:
     def __init__(self, x, y):
@@ -21,5 +21,3 @@ class Mensageiro:
         x = self.x + margem
         y = self.y + h / 2
         text(self.mensagem, x , y)
-        
-        
