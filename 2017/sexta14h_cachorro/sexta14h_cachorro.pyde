@@ -22,3 +22,7 @@ def draw():
 def keyPressed():
     if key == ' ':
         dog.comer()
+        
+def mouseClicked():
+    if dog.mouseover():
+        dog.carinho()

@@ -1,4 +1,5 @@
 #coding: utf-8
+from random import randint
 
 class Cachorro:
     def __init__(self, nome, idade, cor, sexo,notif, patas = 4):
@@ -18,9 +19,28 @@ class Cachorro:
     def comer(self):
         if self.fome > 30:
             self.fome -= 20
-            self.notif.novaMsg(self.nome + " está mais feliz")
+            self.notif.novaMsg(self.nome + " adora essa comida")
         else:
             self.notif.novaMsg(self.nome + " não quer comer...")
+    
+    def carinho(self):
+        chance = randint(0,1)
+        if chance == 1:
+            self.felicidade += 10
+            self.notif.novaMsg(self.nome + " está mais feliz")
+        else:
+            self.felicidade -= 2
+            self.notif.novaMsg(self.nome + " não tá afim de carinho...")
+       
+    def mouseover(self):
+        x = width/2
+        y = height * 3/4
+        d = ((mouseX - x)**2 + (mouseY - y)**2)**0.5
+        r = 60
+        if d < r:
+            return True
+        else:
+            return False
             
     def update(self):
         global height, width
