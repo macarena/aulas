@@ -1,22 +1,55 @@
 var img;
-var x;
-var y;
-var w;
-var h;
+var mouseXant;
+var mouseYant;
 var bolinhas = [];
 
+var minX;
+var minY;
+var maxX;
+var maxY;
+
+var minXimg;
+var minYimg;
+var maxXimg;
+var maxYimg;
+var fundo;
+
+var zise = 500;
+
+function preload() {
+    img = loadImage('revelador.jpg');
+}
+
 function setup() {
-    img = loadImage('bandeira.jpg');
+    fundo = color(255);
+
     createCanvas(innerWidth,innerHeight);
     noStroke();
     
+    minX = width/2 - zise/2;
+    maxX = width/2 + zise/2;
+    minY = height/2 - zise/2;
+    maxY = height/2 + zise/2;
+    
+    minXimg = 0;
+    maxXimg = img.width;
+    minYimg = 0;
+    maxYimg = img.height;
+
     bolinha = {
         x: width / 2,
         y: height / 2,
-        w: 500,
-        h: 500,
-        min: 10,
+        //fx: width / 2,
+        //fy: height / 2,
+        w: zise,
+        h: zise,
+        min: 2,
         cor: color(200),
+        getColor: function() {
+            x = map(this.x, minX, maxX, minXimg, maxXimg);
+            y = map(this.y, minY, maxY, minYimg, maxYimg);
+            this.cor = color(img.get(x,y));
+        },
         split: function() {
             w = this.w / 2;
             h = this.h / 2;
@@ -29,6 +62,9 @@ function setup() {
                 bolinhas.push(Object.create(bolinha));
                 bolinhas[i].w = w;
                 bolinhas[i].h = h;
+                bolinhas[i].x = this.x;
+                bolinhas[i].y = this.y;
+                //bolinhas[i].animating = true;
             }
             bolinhas[0].x = this.x-w/2;
             bolinhas[0].y = this.y-h/2;
@@ -39,29 +75,58 @@ function setup() {
             bolinhas[3].x = this.x+w/2;
             bolinhas[3].y = this.y+h/2;
             
+            bolinhas[0].getColor();
+            bolinhas[1].getColor();
+            bolinhas[2].getColor();
+            bolinhas[3].getColor();
+            
             return bolinhas;
         }
     }
     
+    bolinha.getColor();
     bolinhas.push(bolinha);
 }
 
 function draw() {
-    background(255);
-    for(i=0; i<bolinhas.length; i++) {
-        b = bolinhas[i];
+    background(fundo);
+    for(let i=bolinhas.length-1; i >=0 ; i--) {
+        let b = bolinhas[i];
         fill(b.cor);
-        ellipse(b.x,b.y,b.w,b.h);
-
-        if (dist(mouseX,mouseY,b.x,b.y) < b.w / 2) {
-            novas = b.split();
-            bolinhas.splice(i,1);
-            Array.prototype.push.apply(bolinhas,novas);
+        if (b.cor > 230) {
+            stroke(200);
+            strokeWeight(1);
+        } else {
+            noStroke();
         }
+        ellipse(b.x,b.y,b.w,b.h);
+        
+        if (dist(mouseXant,mouseYant,b.x,b.y) > b.w / 2) {
+            if (dist(mouseX,mouseY,b.x,b.y) < b.w / 2) {
+                novas = b.split();
+                bolinhas.splice(i,1);
+                Array.prototype.push.apply(bolinhas,novas);
+            }
+        }
+        
     }
+    
+    mouseXant = mouseX;
+    mouseYant = mouseY;
 }
 
 function dist(ax, ay, bx, by) {
     dist = Math.sqrt((ax - bx)^2 + (ay - by)^2);
     return dist;
+}
+
+function similiarColor(cor_a, cor_b) {
+    let a = cor_a.levels
+    let b = cor_b.levels
+    for(let i = 0; i < 4; i++) {
+        if(abs(a[i] - b[i]) > 20) {
+            return false;
+        }
+    }
+    return true;
 }
