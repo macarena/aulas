@@ -16,9 +16,10 @@ class Cachorro:
     def __repr__(self):
         return "Este eh o cachorro " + self.nome + ". Ele tem " + str(self.idade) + " anos."
     
-    def comer(self):
-        if self.fome > 30:
-            self.fome -= 20
+    def comer(self, valor):
+        if self.fome > valor:
+            self.fome -= valor
+            print(valor)
             self.notif.novaMsg(self.nome + " adora essa comida")
         else:
             self.notif.novaMsg(self.nome + " não quer comer...")

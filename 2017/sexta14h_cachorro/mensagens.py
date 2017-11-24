@@ -1,4 +1,4 @@
-
+#coding: utf-8
 
 class Mensageiro:
     def __init__(self, x, y):
