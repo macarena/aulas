@@ -9,6 +9,15 @@ class ui:
                         {"nome": "ração", "valor": 10},
                         {"nome": "lixo", "valor": -2}
                         ]
+        self.elementos = []
+        
+        #botões de comida
+        x = 400
+        for comida in self.comidas:
+            #self.botao(x,350,self.cachorro.comer, arg = comida["valor"])
+            b = Botao(x,350)
+            self.elementos.append(b)
+            x += 50
     
     def update(self):
         #barrinha de felicidade
@@ -17,11 +26,17 @@ class ui:
         #barrinha de fome
         self.barrinha(10,60,self.cachorro.fome, color(0,255,0))
         
-        #botões de comida
-        x = 400
-        for comida in self.comidas:
-            self.botao(x,350,self.cachorro.comer, arg = comida["valor"])
-            x += 50
+        for elemento in self.elementos:
+            elemento.update()
+
+    def mouseClicado(self):
+        for elemento in self.elementos:
+            dx = mouseX - elemento.x
+            dy = mouseY - elemento.y
+
+            if dx >= 0 and dx <= elemento.w:
+                if dy >= 0 and dy <= elemento.h:
+                    elemento.clicado()
 
     def barrinha(self, x, y, qtd, cor = color(255,0,0)):
         tamanho = 250
@@ -36,18 +51,25 @@ class ui:
         noStroke()
         fill(cor)
         rect(x,y,pre,grossura)
+                    
+class Botao:
+    w = 50
+    h = 50
+    cor = color(200,200,200)
+    
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
         
-    def botao(self, x, y, callback, arg, cor = color(200,200,255)):
+    def definirCallback(self, func):
+        self.callback = func
+        
+    def update(self):
         stroke(30)
         strokeWeight(1)
-        fill(cor)
-        w = 50
-        h = 50
-        rect(x, y, w, h)
-        dx = mouseX - x
-        dy = mouseY - y
+        fill(self.cor)
+        rect(self.x, self.y, self.w, self.h)
         
-        if mousePressed:
-            if dx >= 0 and dx <= w:
-                if dy >= 0 and dy <= h:
-                    callback(arg)
+    def clicado(self):
+        if hasattr(self, 'callback'):
+            self.callback()

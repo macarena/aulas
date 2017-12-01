@@ -24,5 +24,6 @@ def keyPressed():
         dog.comer()
         
 def mouseClicked():
+    interface.mouseClicado()
     if dog.mouseover():
         dog.carinho()
