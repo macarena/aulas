@@ -39,16 +39,34 @@ function setup() {
     bolinha = {
         x: width / 2,
         y: height / 2,
-        //fx: width / 2,
-        //fy: height / 2,
+        fx: width / 2,
+        fy: height / 2,
         w: zise,
         h: zise,
+        velox: 0,
+        veloy: 0,
         min: 2,
         cor: color(200),
         getColor: function() {
             x = map(this.x, minX, maxX, minXimg, maxXimg);
             y = map(this.y, minY, maxY, minYimg, maxYimg);
             this.cor = color(img.get(x,y));
+        },
+        animarAcelerado: function() {
+            this.x += (this.fx - this.x) * 0.05 * 20;
+            this.y += (this.fy - this.y) * 0.05;
+        },
+        animarRetilineo: function() {
+            if(this.x != this.fx) {
+                this.x += (this.fx - this.x) / 30;
+            }
+            if(this.y != this.fy) {
+                this.y += 20;
+            }
+        },
+        getVelo() {
+            this.velox = (this.fx - this.x) / 30;
+            this.veloy = (this.fy - this.y) / 30;
         },
         split: function() {
             w = this.w / 2;
@@ -64,16 +82,15 @@ function setup() {
                 bolinhas[i].h = h;
                 bolinhas[i].x = this.x;
                 bolinhas[i].y = this.y;
-                //bolinhas[i].animating = true;
             }
-            bolinhas[0].x = this.x-w/2;
-            bolinhas[0].y = this.y-h/2;
-            bolinhas[1].x = this.x+w/2;
-            bolinhas[1].y = this.y-h/2;
-            bolinhas[2].x = this.x-w/2;
-            bolinhas[2].y = this.y+h/2;
-            bolinhas[3].x = this.x+w/2;
-            bolinhas[3].y = this.y+h/2;
+            bolinhas[0].fx = this.x-w/2;
+            bolinhas[0].fy = this.y-h/2;
+            bolinhas[1].fx = this.x+w/2;
+            bolinhas[1].fy = this.y-h/2;
+            bolinhas[2].fx = this.x-w/2;
+            bolinhas[2].fy = this.y+h/2;
+            bolinhas[3].fx = this.x+w/2;
+            bolinhas[3].fy = this.y+h/2;
             
             bolinhas[0].getColor();
             bolinhas[1].getColor();
@@ -93,12 +110,13 @@ function draw() {
     for(let i=bolinhas.length-1; i >=0 ; i--) {
         let b = bolinhas[i];
         fill(b.cor);
-        if (b.cor > 230) {
+        if (similiarColor(b.cor, fundo)) {
             stroke(200);
             strokeWeight(1);
         } else {
             noStroke();
         }
+        b.animarRetilineo();    
         ellipse(b.x,b.y,b.w,b.h);
         
         if (dist(mouseXant,mouseYant,b.x,b.y) > b.w / 2) {
@@ -108,7 +126,6 @@ function draw() {
                 Array.prototype.push.apply(bolinhas,novas);
             }
         }
-        
     }
     
     mouseXant = mouseX;
