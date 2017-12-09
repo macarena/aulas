@@ -16,7 +16,8 @@ class Cachorro:
     def __repr__(self):
         return "Este eh o cachorro " + self.nome + ". Ele tem " + str(self.idade) + " anos."
     
-    def comer(self, valor):
+    def comer(self, **kwargs):
+        valor = kwargs['valor']
         if self.fome > valor:
             self.fome -= valor
             print(valor)

@@ -16,6 +16,7 @@ class ui:
         for comida in self.comidas:
             #self.botao(x,350,self.cachorro.comer, arg = comida["valor"])
             b = Botao(x,350)
+            b.definirCallback(self.cachorro.comer, valor = comida["valor"])
             self.elementos.append(b)
             x += 50
     
@@ -61,8 +62,9 @@ class Botao:
         self.x = x
         self.y = y
         
-    def definirCallback(self, func):
+    def definirCallback(self, func, **kwargs):
         self.callback = func
+        self.callback_args = kwargs
         
     def update(self):
         stroke(30)
@@ -72,4 +74,4 @@ class Botao:
         
     def clicado(self):
         if hasattr(self, 'callback'):
-            self.callback()
+            self.callback(self.callback_args)
