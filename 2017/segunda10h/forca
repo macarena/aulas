@@ -1,0 +1,32 @@
+from random import randint
+
+palavras = [
+    'bola',
+    'carro',
+    'poste',
+    'arvore',
+    'mochila',
+    'compurtador',
+    'lego',
+    'eletricista',
+    'tomada',
+    'tomate'
+]
+
+vidas = 8
+n = randint(0, len(palavras) - 1)
+palavra = palavras[n]
+tracinhos = []
+
+print(palavra)
+
+for l in palavra:
+    tracinhos.append('_')
+
+for t in range(vidas):
+    print(" ".join(tracinhos))
+
+    chute = input('Que letra você acha que tem na palavra? ')
+    for i in range(len(palavra)):
+        if chute == palavra[i]:
+            tracinhos[i] = chute

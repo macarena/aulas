@@ -10,7 +10,7 @@ jogadores = ["Neymar", "Messi", "Ronaldo", "Maradona", "Pelé", "Zico", "Cristia
 print("Esses são os jogadores do meu time:")
 imprime_lista(jogadores)
 
-print("Ainda faltam três... Quêm você sugere?")
+print("Ainda faltam três... Quem você sugere?")
 while len(jogadores) < 11:
     jogador = input("Digite um nome de jogador: ")
     jogadores.append(jogador)
