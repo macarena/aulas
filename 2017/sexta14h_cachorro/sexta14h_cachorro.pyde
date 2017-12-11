@@ -18,11 +18,8 @@ def draw():
     dog.update()
     notif.update()
     interface.update()
-    
-def keyPressed():
-    if key == ' ':
-        dog.comer()
         
 def mouseClicked():
+    interface.mouseClicado()
     if dog.mouseover():
         dog.carinho()

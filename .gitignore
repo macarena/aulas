@@ -1,2 +1,3 @@
 arduino/libraries
 .idea/
+*$py.class
