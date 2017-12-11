@@ -1,0 +1,61 @@
+from random import randint
+
+largura = 5
+altura = 5
+
+tabuleiro = []
+
+for i in range(altura):
+    tabuleiro.append(['o'] * largura)
+
+def imprimeTabuleiro(t):
+    for l in t:
+        print(' '.join(l))
+
+def VerificarChute(chute,c,l,tabuleiro):
+    retorno = True
+    if chute[0] > c:
+        print ('Não tem {} colunas no tabuleiro.'.format(chute[0]))
+        retorno = False
+    if chute[1] > l:
+        print ('Não tem {} linhas no tabuleiro.'.format(chute[1]))
+        retorno = False
+    if retorno and tabuleiro[chute[1]-1][chute[0]-1] == 'x':
+        print('você ja tentou esta casa.')
+        retorno=False
+    return retorno
+
+imprimeTabuleiro(tabuleiro)
+
+x = randint(1, largura)
+y = randint(1, altura)
+
+coordenada = (x, y)
+
+tentativas = 1
+
+min = y - randint(1,4)
+max = y + randint(1,4)
+
+print ('é uma linha maior que {} e menor que {}'.format(min,max))
+
+
+linha = int(input('Em qual linha você acha que esta o barco?'))
+coluna = int(input('Em qual coluna você acha que esta o barco?'))
+chute = (coluna, linha)
+
+while not chute == coordenada:
+    if VerificarChute(chute,largura,altura,tabuleiro):
+        tentativas += 1
+        print("Está errado")
+        tabuleiro[linha-1][coluna-1] = 'x'
+        
+    imprimeTabuleiro(tabuleiro)
+    print("Está é sua tentativa número {}.".format(tentativas))
+    linha = int(input('Em qual linha você acha que esta o barco?'))
+    coluna = int(input('Em qual coluna você acha que esta o barco?'))
+    chute = (coluna, linha)
+
+print("Você acertou em {} tentativas!".format(tentativas))
+tabuleiro[linha-1][coluna-1] = 'V'
+imprimeTabuleiro(tabuleiro)
