@@ -47,9 +47,12 @@ function setup() {
         veloy: 0,
         min: 2,
         cor: color(200),
+        movendo: function() {
+            return !(this.x == this.fx && this.y == this.fy);
+        },
         getColor: function() {
-            x = map(this.x, minX, maxX, minXimg, maxXimg);
-            y = map(this.y, minY, maxY, minYimg, maxYimg);
+            x = map(this.fx, minX, maxX, minXimg, maxXimg);
+            y = map(this.fy, minY, maxY, minYimg, maxYimg);
             this.cor = color(img.get(x,y));
         },
         animarAcelerado: function() {
@@ -58,10 +61,18 @@ function setup() {
         },
         animarRetilineo: function() {
             if(this.x != this.fx) {
-                this.x += (this.fx - this.x) / 30;
+                if (abs(this.fx - this.x) < abs(this.velox)) {
+                    this.x = this.fx;
+                } else {
+                    this.x += this.velox;
+                }
             }
             if(this.y != this.fy) {
-                this.y += 20;
+                if (abs(this.fy - this.y) < abs(this.veloy)) {
+                    this.y = this.fy;
+                } else {
+                    this.y += this.veloy;
+                }
             }
         },
         getVelo() {
@@ -92,10 +103,10 @@ function setup() {
             bolinhas[3].fx = this.x+w/2;
             bolinhas[3].fy = this.y+h/2;
             
-            bolinhas[0].getColor();
-            bolinhas[1].getColor();
-            bolinhas[2].getColor();
-            bolinhas[3].getColor();
+            for(i=0;i<4;i++) {
+                bolinhas[i].getColor();
+                bolinhas[i].getVelo();
+            }
             
             return bolinhas;
         }
@@ -119,11 +130,13 @@ function draw() {
         b.animarRetilineo();    
         ellipse(b.x,b.y,b.w,b.h);
         
-        if (dist(mouseXant,mouseYant,b.x,b.y) > b.w / 2) {
-            if (dist(mouseX,mouseY,b.x,b.y) < b.w / 2) {
-                novas = b.split();
-                bolinhas.splice(i,1);
-                Array.prototype.push.apply(bolinhas,novas);
+        if (!b.movendo()) {
+            if (dist(mouseXant,mouseYant,b.x,b.y) > b.w / 2) {
+                if (dist(mouseX,mouseY,b.x,b.y) < b.w / 2) {
+                    novas = b.split();
+                    bolinhas.splice(i,1);
+                    Array.prototype.push.apply(bolinhas,novas);
+                }
             }
         }
     }
