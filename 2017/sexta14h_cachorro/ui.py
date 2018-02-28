@@ -14,11 +14,17 @@ class ui:
         #botões de comida
         x = 400
         for comida in self.comidas:
-            #self.botao(x,350,self.cachorro.comer, arg = comida["valor"])
             b = Botao(x,350)
-            b.definirCallback(self.cachorro.comer, valor = comida["valor"])
+            b.definirCallback(self.cachorro.comer, comida["valor"])
+            if comida["nome"] == "biscoito":
+                b.definirImagem('biscoito.png')
             self.elementos.append(b)
             x += 50
+            
+        b = Botao(0,350)
+        b.definirCallback(self.cachorro.brincar)
+        self.elementos.append(b)
+        
     
     def update(self):
         #barrinha de felicidade
@@ -62,16 +68,21 @@ class Botao:
         self.x = x
         self.y = y
         
-    def definirCallback(self, func, **kwargs):
+    def definirCallback(self, func, *args):
         self.callback = func
-        self.callback_args = kwargs
-        
+        self.callback_args = args
+    
+    def definirImagem(self, url):
+        self.img = loadImage(url)
+                          
     def update(self):
         stroke(30)
         strokeWeight(1)
         fill(self.cor)
         rect(self.x, self.y, self.w, self.h)
+        if hasattr(self, 'img'):
+            image(self.img, self.x, self.y, self.w, self.h)
         
     def clicado(self):
         if hasattr(self, 'callback'):
-            self.callback(self.callback_args)
+            self.callback(*self.callback_args)

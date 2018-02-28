@@ -6,11 +6,12 @@ caramelo = color(139, 87, 66)
 
 notif = Mensageiro(0,0)
 dog = Cachorro("Totó", 4, caramelo, "macho", notif)
-interface = ui(dog)
+
 
 def setup():
-    global img
+    global img, interface
     size(600,400)
+    interface = ui(dog)
     img = loadImage('cenario.png')
     
 def draw():

@@ -16,14 +16,18 @@ class Cachorro:
     def __repr__(self):
         return "Este eh o cachorro " + self.nome + ". Ele tem " + str(self.idade) + " anos."
     
-    def comer(self, **kwargs):
-        valor = kwargs['valor']
+    def comer(self, valor):
         if self.fome > valor:
             self.fome -= valor
             print(valor)
             self.notif.novaMsg(self.nome + " adora essa comida")
         else:
             self.notif.novaMsg(self.nome + " não quer comer...")
+            
+    def brincar(self):
+        self.fome += 20
+        self.felicidade += 10
+        self.notif.novaMsg(self.nome + " brincou e está com fome!")
     
     def carinho(self):
         chance = randint(0,1)
