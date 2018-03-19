@@ -1,44 +1,72 @@
-#variáveis da bolinha
-x = 0
-y = 0
-vx = 1
-vy = -1
-tamanho = 15
+#variáveis da bola
+x=20
+y=20
+tamanho=10
+vx=1
+vy=-1
 cor = color(255)
 
-#variáveis da raquete 1
-R1x = 0
-R1y = 0
-R1w = 20
-R1h = 100
+#raquete 1
+r1x = 0
+r1y = 0
+r1w = 20
+r1h = 100
 
-#variáveis da raquete 2
-R2x = 0
-R2y = 0
-R2w = 20
-R2h = 100
+#raquete 2
+r2x = 0
+r2y = 0
+r2w = 20
+r2h = 100
+
+
 
 def setup():
-    global x, y, R1x, R1y, R2x, R2y
+    global x,y,r1x,r1y,r2x,r2y
     size(600,400)
-    x = width / 2
-    y = height / 2
-    R1x = R1w/2 + 30
-    R1y = height / 2
-    R2x = width - R2w/2 - 30
-    R2y = height / 2
+    x=width/2
+    y=height/2
+    r1x=r1w/2 + 30
+    r1y=height/2
+    r2x=width-r2w/2-30
+    r2y=height/2
     rectMode(CENTER)
     fill(cor)
-    
+
 def draw():
-    global x, y, vy
-    x = x + vx
-    y = y + vy
+    global x,y,vy,vx,r2y
+    x=x+vx
+    y=y+vy
     
-    if y + tamanho / 2 > height or y - tamanho / 2 < 0:
+    r2y = constrain(mouseY, r2h/2, height-r2h/2)
+    
+    if y + tamanho/2 > height or y - tamanho/2 < 0:
         vy = vy * -1
-        
+         
+    if x + tamanho/2 > width or x - tamanho/2 < 0:
+        x = width/2
+        y = height/2
+        vx = vx * -1
+
     background(0)
+    if passando(x,r2x):
+        fill(255,0,0)
+    else:
+        fill(255)
     ellipse(x,y,tamanho,tamanho)
-    rect(R1x, R1y, R1w, R1h)
-    rect(R2x, R2y, R2w, R2h)
+
+    rect(r1x,r1y,r1w,r1h)
+    rect(r2x,r2y,r2w,r2h)
+    
+def keyPressed():
+    global r1y
+    
+    if key == "w":
+        r1y = constrain(r1y - 10, r1h/2, height-r1h/2)
+    if key == "s":
+        r1y = constrain(r1y + 10, r1h/2, height-r1h/2)
+        
+def passando(x1, x2):
+    if abs(x1 - x2) < 25:
+        return True
+    else:
+        return False
