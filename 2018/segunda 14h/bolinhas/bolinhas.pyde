@@ -20,18 +20,32 @@ class bolinha:
         
         if self.x + self.d/2 > width or self.x - self.d/2 < 0:
             self.vx *= -1
+            
+    def rebate(self):
+        self.vx *= -1
+        self.vy *= -1
 
 todas = []
 
 def setup():
     size(800,600)
-    for n in range(100):
-        x = random(50, width-50)
-        y = random(50, height-50)
-        todas.append( bolinha(x, y) )
+    x = random(50, width-50)
+    y = random(50, height-50)
+    todas.append( bolinha(x, y) )
     
 def draw():
     background(0)
-    for b in todas:
+    for i in range(len(todas)):
+        b = todas[i]
         b.desenha()
         b.move()
+        for j in range(i+1,len(todas)):
+            outra = todas[j]
+            raios = b.d/2 + outra.d/2
+            distancia = dist(b.x,b.y,outra.x,outra.y)
+            if distancia < raios:
+                b.rebate()
+                outra.rebate()
+        
+def mouseClicked():
+    todas.append( bolinha(mouseX, mouseY) )
