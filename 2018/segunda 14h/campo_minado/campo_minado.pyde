@@ -5,7 +5,7 @@ class quadradinho:
         self.y = self.tamanho * linha
         self.coluna = coluna
         self.linha = linha
-        self.revelado = False
+        self.revelado = True
         self.bomba = False
         self.proximidade = 0
         
@@ -15,7 +15,8 @@ class quadradinho:
             for q in linha:
                 if self.linha -1 <= q.linha <= self.linha +1:
                     if self.coluna -1 <= q.coluna <= self.coluna +1:
-                        q.proximidade += 1
+                        if self.coluna != q.coluna or self.linha != q.linha:
+                            q.proximidade += 1
                 
     def desenha(self):
         if self.revelado:
@@ -31,7 +32,16 @@ class quadradinho:
         textSize(42)
         text(self.proximidade, self.x, self.y)
 
+def contaBombas():
+    total = 0
+    for linha in tabuleiro:
+        for quadradinho in linha:
+            if quadradinho.bomba:
+                total += 1
+    return total
+
 tabuleiro = []
+qt_bombas = 20
 
 def setup():
     size(500,500)
@@ -39,10 +49,15 @@ def setup():
         quadradinhos = [] 
         for coluna in range(10): 
             q = quadradinho(coluna,linha)  
-            if int(random(0,2)) == 1:
-                q.colocaBomba()
             quadradinhos.append(q)
         tabuleiro.append(quadradinhos)
+        
+    while contaBombas() < qt_bombas:
+        l = int(random(0,9))
+        c = int(random(0,9))
+        q = tabuleiro[l][c]
+        if not q.bomba:
+            q.colocaBomba()
         
 def draw():
     for linha in tabuleiro:
